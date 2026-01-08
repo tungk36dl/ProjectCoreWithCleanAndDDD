@@ -12,6 +12,14 @@ namespace ProjectCore.Models.Entities
 
         protected Permission() { }
 
+        // Field Code được tạo tự động dựa trên Module và Action
+        /// <summary>
+        /// Truong Code được tạo tự động dựa trên Module và Action
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="module"></param>
+        /// <param name="action"></param>
+        /// <param name="createdBy"></param>
         public Permission(Guid id, string module, string action, Guid createdBy)
             : base(id, createdBy)
         {

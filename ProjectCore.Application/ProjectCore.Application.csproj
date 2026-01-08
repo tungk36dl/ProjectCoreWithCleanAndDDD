@@ -11,10 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <Folder Include="Dtos\Users\" />
     <Folder Include="Mappings\" />
     <Folder Include="Common\" />
-    <Folder Include="UseCases\" />
   </ItemGroup>
 
 </Project>

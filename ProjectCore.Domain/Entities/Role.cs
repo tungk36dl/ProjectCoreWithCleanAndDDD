@@ -1,11 +1,12 @@
 using ProjectCore.Domain.Entities;
+using ProjectCore.Domain.ValueObjects;
 using ProjectCore.Models.Entities;
 
 namespace ProjectCore.Models
 {
     public class Role : DomainEntity<Guid>
     {
-        public string Name { get; private set; }
+        public RoleName Name { get; private set; }
         public string? Description { get; private set; }
 
         private readonly List<RolePermission> _permissions = new();
@@ -13,18 +14,18 @@ namespace ProjectCore.Models
 
         protected Role() { }
 
-        public Role(Guid id, string name, Guid createdBy)
+        public Role(Guid id, RoleName name, Guid createdBy)
             : base(id, createdBy)
         {
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
-        public void AddPermission(Guid permissionId)
+        public void AddPermission(Guid permissionId, Guid createdBy)
         {
             if (_permissions.Any(x => x.PermissionId == permissionId))
                 return;
 
-            _permissions.Add(new RolePermission(Id, permissionId));
+            _permissions.Add(new RolePermission(Id, permissionId, createdBy));
         }
 
         public void RemovePermission(Guid permissionId)

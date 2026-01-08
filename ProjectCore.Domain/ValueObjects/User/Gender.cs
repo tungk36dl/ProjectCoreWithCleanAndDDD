@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjectCore.Domain.ValueObjects
+namespace ProjectCore.Domain.ValueObjects.User
 {
     public enum Gender
     {

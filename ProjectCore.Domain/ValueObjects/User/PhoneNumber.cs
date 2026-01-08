@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ProjectCore.Domain.ValueObjects
+namespace ProjectCore.Domain.ValueObjects.User
 {
     public sealed record PhoneNumber
     {
