@@ -51,8 +51,13 @@ public sealed class RoleConfiguration
              .HasColumnName("Name")
              .IsRequired()
              .HasMaxLength(100);
+            u.HasIndex(p => p.Value).IsUnique();
         });
-        builder.HasIndex(x => x.Name).IsUnique();
+        // ===== Description =====
+        builder.Property(x => x.Description)
+               .HasMaxLength(500)
+               .IsRequired(false);
+
         // ===== RELATIONSHIP =====
         builder.HasMany(x => x.RolePermissions)
                .WithOne()
@@ -91,6 +96,21 @@ public sealed class PermissionConfiguration
              .IsRequired()
              .HasMaxLength(100);
         });
+
+        // ===== Module =====
+        builder.Property(x => x.Module)
+               .IsRequired()
+               .HasMaxLength(50);
+
+        // ===== Action =====
+        builder.Property(x => x.Action)
+               .IsRequired()
+               .HasMaxLength(50);
+
+        // ===== Description =====
+        builder.Property(x => x.Description)
+               .HasMaxLength(500)
+               .IsRequired(false);
     }
 
     public sealed class UserConfiguration
