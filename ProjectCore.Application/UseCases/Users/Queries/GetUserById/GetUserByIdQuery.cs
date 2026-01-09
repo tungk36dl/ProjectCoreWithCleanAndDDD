@@ -8,6 +8,6 @@ namespace ProjectCore.Application.UseCases.Users.Queries.GetUserById
 {
     public class GetUserByIdQuery
     {
-        public Guid UserId { get; }
+        public Guid UserId { get; set; }
     }
 }

@@ -1,0 +1,35 @@
+﻿using ProjectCore.Application.UseCases.Users.Commands.CreateUser;
+using Microsoft.Extensions.DependencyInjection;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ProjectCore.Application.UseCases.Users.Commands.UpdateUserProfile;
+using ProjectCore.Application.UseCases.Users.Queries.GetUserById;
+using ProjectCore.Application.UseCases.Users.Queries.GetUserByUserNameOrEmail;
+using ProjectCore.Application.UseCases.Users.Queries.GetAllUsers;
+using ProjectCore.Application.UseCases.Users.Commands.UpdateUser;
+using ProjectCore.Application.UseCases.Users.Commands.DeleteUser;
+
+namespace ProjectCore.Application
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddApplication(this IServiceCollection services)
+        {
+            services.AddScoped<LoginUserHandler>();
+            services.AddScoped<CreateUserHandler>();
+            services.AddScoped<UpdateUserProfileHandler>();
+            services.AddScoped<GetUserByIdHandler>();
+            services.AddScoped<GetUserByUserNameEmailHandler>();
+
+            services.AddScoped<GetAllUsersHandler>();
+            services.AddScoped<UpdateUserHandler>();
+            services.AddScoped<DeleteUserHandler>();
+
+            return services;
+        }
+    }
+}

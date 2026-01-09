@@ -1,4 +1,5 @@
-﻿using ProjectCore.Models.Entities;
+﻿using ProjectCore.Domain.Entities;
+using ProjectCore.Domain.ValueObjects.Permission;
 
 namespace ProjectCore.Domain.Interfaces
 {

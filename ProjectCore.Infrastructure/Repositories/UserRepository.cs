@@ -81,6 +81,13 @@ namespace ProjectCore.Infrastructure.Repositories
         {
             return _context.Users.AnyAsync(x => x.UserName.Value == userName.Value, cancellationToken);
         }
+
+        public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Users
+                .Include(x => x.UserRoles)
+                .ToListAsync(cancellationToken);
+        }
     }
 
 }

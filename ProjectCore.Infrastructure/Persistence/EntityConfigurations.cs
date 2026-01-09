@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ProjectCore.Domain.Entities;
-using ProjectCore.Models;
 using StudentMngt.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -34,109 +33,170 @@ public abstract class BaseEntityConfiguration<TEntity, TKey>
     }
 }
 
-public sealed class UserConfiguration
-    : BaseEntityConfiguration<User, Guid>
+public sealed class RoleConfiguration
+    : BaseEntityConfiguration<Role, Guid>
 {
-    public override void Configure(EntityTypeBuilder<User> builder)
+    public override void Configure(EntityTypeBuilder<Role> builder)
     {
         base.Configure(builder);
-
         // ===== TABLE =====
-        builder.ToTable("Users");
-
+        builder.ToTable("Roles");
         // ===== ID =====
         builder.Property(x => x.Id)
                .ValueGeneratedNever();
-
-
-        // ===== PASSWORD =====
-        builder.Property(x => x.PasswordHash)
-               .IsRequired()
-               .HasMaxLength(500);
-
-        // ===== VALUE OBJECTS =====
-
-        // UserName
-        builder.OwnsOne(x => x.UserName, u =>
+        // ===== RoleName =====
+        builder.OwnsOne(x => x.Name, u =>
         {
             u.Property(p => p.Value)
-             .HasColumnName("UserName")
+             .HasColumnName("Name")
              .IsRequired()
              .HasMaxLength(100);
         });
-
-        // Email
-        builder.OwnsOne(x => x.Email, e =>
-        {
-            e.Property(p => p.Value)
-             .HasColumnName("Email")
-             .IsRequired()
-             .HasMaxLength(150);
-
-            e.HasIndex(p => p.Value).IsUnique();
-        });
-
-        // FullName (nullable)
-        builder.OwnsOne(x => x.FullName, f =>
-        {
-            f.Property(p => p.Value)
-             .HasColumnName("FullName")
-             .HasMaxLength(150);
-        });
-
-        // PhoneNumber (nullable)
-        builder.OwnsOne(x => x.PhoneNumber, p =>
-        {
-            p.Property(x => x.Value)
-             .HasColumnName("PhoneNumber")
-             .HasMaxLength(20);
-        });
-
-        // Avatar (nullable)
-        builder.OwnsOne(x => x.Avatar, a =>
-        {
-            a.Property(p => p.Value)
-             .HasColumnName("Avatar")
-             .HasMaxLength(500);
-        });
-
-        // ===== ENUM =====
-        builder.Property(x => x.Gender)
-               .HasConversion<string>()
-               .HasMaxLength(20);
-
-        // ===== SIMPLE FIELDS =====
-        builder.Property(x => x.Address)
-               .HasMaxLength(255);
-
-        builder.Property(x => x.DateOfBirth)
-               .HasColumnType("date");
-
+        builder.HasIndex(x => x.Name).IsUnique();
         // ===== RELATIONSHIP =====
-        builder.HasMany(x => x.UserRoles)
+        builder.HasMany(x => x.RolePermissions)
                .WithOne()
-               .HasForeignKey(x => x.UserId)
+               .HasForeignKey(x => x.RoleId)
                .OnDelete(DeleteBehavior.Cascade);
-
-        // ===== GLOBAL FILTER (OPTIONAL) =====
-        builder.HasQueryFilter(x => x.Status == EntityStatus.Active);
     }
 }
 
-public sealed class UserRoleConfiguration
-    : IEntityTypeConfiguration<UserRole>
+public sealed class RolePermissionConfiguration
+    : IEntityTypeConfiguration<RolePermission>
 {
-    public void Configure(EntityTypeBuilder<UserRole> builder)
+    public void Configure(EntityTypeBuilder<RolePermission> builder)
     {
-        builder.ToTable("UserRoles");
+        builder.ToTable("RolePermissions");
+        builder.HasKey(x => new { x.RoleId, x.PermissionId });
+     
+    }
+}
 
-        builder.HasKey(x => new { x.UserId, x.RoleId });
+public sealed class PermissionConfiguration
+    : BaseEntityConfiguration<Permission, Guid>
+{
+    public override void Configure(EntityTypeBuilder<Permission> builder)
+    {
+        base.Configure(builder);
+        // ===== TABLE =====
+        builder.ToTable("Permissions");
+        // ===== ID =====
+        builder.Property(x => x.Id)
+               .ValueGeneratedNever();
+        // ===== PermissionCode =====
+        builder.OwnsOne(x => x.Code, u =>
+        {
+            u.Property(p => p.Value)
+             .HasColumnName("Code")
+             .IsRequired()
+             .HasMaxLength(100);
+        });
+    }
 
-        builder.Property(x => x.AssignedAt)
-               .IsRequired();
+    public sealed class UserConfiguration
+    : BaseEntityConfiguration<User, Guid>
+    {
+        public override void Configure(EntityTypeBuilder<User> builder)
+        {
+            base.Configure(builder);
 
-        builder.Property(x => x.AssignedBy)
-               .IsRequired();
+            // ===== TABLE =====
+            builder.ToTable("Users");
+
+            // ===== ID =====
+            builder.Property(x => x.Id)
+                   .ValueGeneratedNever();
+
+
+            // ===== PASSWORD =====
+            builder.Property(x => x.PasswordHash)
+                   .IsRequired()
+                   .HasMaxLength(500);
+
+            // ===== VALUE OBJECTS =====
+
+            // UserName
+            builder.OwnsOne(x => x.UserName, u =>
+            {
+                u.Property(p => p.Value)
+                 .HasColumnName("UserName")
+                 .IsRequired()
+                 .HasMaxLength(100);
+            });
+
+            // Email
+            builder.OwnsOne(x => x.Email, e =>
+            {
+                e.Property(p => p.Value)
+                 .HasColumnName("Email")
+                 .IsRequired()
+                 .HasMaxLength(150);
+
+                e.HasIndex(p => p.Value).IsUnique();
+            });
+
+            // FullName (nullable)
+            builder.OwnsOne(x => x.FullName, f =>
+            {
+                f.Property(p => p.Value)
+                 .HasColumnName("FullName")
+                 .HasMaxLength(150);
+            });
+
+            // PhoneNumber (nullable)
+            builder.OwnsOne(x => x.PhoneNumber, p =>
+            {
+                p.Property(x => x.Value)
+                 .HasColumnName("PhoneNumber")
+                 .HasMaxLength(20);
+            });
+
+            // Avatar (nullable)
+            builder.OwnsOne(x => x.Avatar, a =>
+            {
+                a.Property(p => p.Value)
+                 .HasColumnName("Avatar")
+                 .HasMaxLength(500);
+            });
+
+            // ===== ENUM =====
+            builder.Property(x => x.Gender)
+                   .HasConversion<string>()
+                   .HasMaxLength(20);
+
+            // ===== SIMPLE FIELDS =====
+            builder.Property(x => x.Address)
+                   .HasMaxLength(255);
+
+            builder.Property(x => x.DateOfBirth)
+                   .HasColumnType("date");
+
+            // ===== RELATIONSHIP =====
+            builder.HasMany(x => x.UserRoles)
+                   .WithOne()
+                   .HasForeignKey(x => x.UserId)
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            // ===== GLOBAL FILTER (OPTIONAL) =====
+            builder.HasQueryFilter(x => x.Status == EntityStatus.Active);
+        }
+    }
+
+    public sealed class UserRoleConfiguration
+        : IEntityTypeConfiguration<UserRole>
+    {
+        public void Configure(EntityTypeBuilder<UserRole> builder)
+        {
+            builder.ToTable("UserRoles");
+
+            builder.HasKey(x => new { x.UserId, x.RoleId });
+
+            builder.Property(x => x.AssignedAt)
+                   .IsRequired();
+
+            builder.Property(x => x.AssignedBy)
+                   .IsRequired();
+        }
     }
 }
 

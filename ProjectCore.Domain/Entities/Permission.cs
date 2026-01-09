@@ -1,9 +1,7 @@
 ﻿using ProjectCore.Domain.Entities;
-using ProjectCore.Domain.ValueObjects;
 using ProjectCore.Domain.ValueObjects.Permission;
 
-namespace ProjectCore.Models.Entities
-{
+namespace ProjectCore.Domain.Entities;
     public class Permission : DomainEntity<Guid>
     {
         public PermissionCode Code { get; private set; }   // Ví dụ: USER_CREATE
@@ -30,4 +28,4 @@ namespace ProjectCore.Models.Entities
         }
     }
 
-}
+

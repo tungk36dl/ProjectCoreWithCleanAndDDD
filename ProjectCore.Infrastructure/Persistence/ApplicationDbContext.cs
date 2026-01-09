@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectCore.Domain.Entities;
-using ProjectCore.Models;
-using ProjectCore.Models.Entities;
+
 
 namespace ProjectCore.Infrastructure.Persistence
 {

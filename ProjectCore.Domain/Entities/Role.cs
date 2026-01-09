@@ -1,8 +1,7 @@
 using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.ValueObjects;
-using ProjectCore.Models.Entities;
 
-namespace ProjectCore.Models
+namespace ProjectCore.Domain.Entities
 {
     public class Role : DomainEntity<Guid>
     {

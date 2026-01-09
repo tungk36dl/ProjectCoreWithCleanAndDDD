@@ -47,4 +47,6 @@ public interface IUserRepository
     void Update(User user);
 
     void Remove(User user);
+    
+    Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default);
 }

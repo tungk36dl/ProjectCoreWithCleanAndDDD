@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectCore.Application.Common.Security;
 using ProjectCore.Application.Interfaces;
 using ProjectCore.Domain.Interfaces;
 using ProjectCore.Infrastructure.Persistence;
 using ProjectCore.Infrastructure.Repositories;
+using ProjectCore.Infrastructure.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +29,8 @@ namespace ProjectCore.Infrastructure
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPermissionQueryRepository, PermissionQueryRepository>();
+            services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();
 
             return services;
         }

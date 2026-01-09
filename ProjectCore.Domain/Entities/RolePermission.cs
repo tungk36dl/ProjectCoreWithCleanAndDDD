@@ -1,6 +1,6 @@
 ﻿using ProjectCore.Domain.Entities;
 
-namespace ProjectCore.Models.Entities
+namespace ProjectCore.Domain.Entities
 {
     public class RolePermission : DomainEntity<Guid>
     {

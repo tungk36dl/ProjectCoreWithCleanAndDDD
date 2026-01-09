@@ -1,6 +1,6 @@
 ﻿using ProjectCore.Application.Interfaces;
+using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.Interfaces;
-using ProjectCore.Models.Entities;
 
 namespace ProjectCore.Application.UseCases.Permissions.Scan
 {
