@@ -1,11 +1,12 @@
 ﻿using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.ValueObjects;
+using ProjectCore.Domain.ValueObjects.Permission;
 
 namespace ProjectCore.Models.Entities
 {
     public class Permission : DomainEntity<Guid>
     {
-        public string Code { get; private set; }   // Ví dụ: USER_CREATE
+        public PermissionCode Code { get; private set; }   // Ví dụ: USER_CREATE
         public string Module { get; private set; } // User
         public string Action { get; private set; } // Create
         public string? Description { get; private set; }
@@ -25,7 +26,7 @@ namespace ProjectCore.Models.Entities
         {
             Module = module;
             Action = action;
-            Code = $"{module.ToUpper()}_{action.ToUpper()}";
+            Code = new PermissionCode(module, action);
         }
     }
 

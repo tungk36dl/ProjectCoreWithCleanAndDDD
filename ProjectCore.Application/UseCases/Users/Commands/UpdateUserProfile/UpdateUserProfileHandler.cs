@@ -1,4 +1,5 @@
 ﻿using ProjectCore.Application.Interfaces;
+using ProjectCore.Domain.Exceptions;
 using ProjectCore.Domain.Interfaces;
 using ProjectCore.Domain.ValueObjects.User;
 
@@ -24,15 +25,15 @@ namespace ProjectCore.Application.UseCases.Users.Commands.UpdateUserProfile
             var user = await _userRepository.GetByIdAsync(command.UserId, cancellationToken);
             if (user == null)
             {
-                throw new Exception($"User with ID {command.UserId} not found.");
+                throw new UserNotFoundException();
             }
             user.UpdateProfile(
-                new FullName(command.FullName), 
-                new PhoneNumber(command.PhoneNumber),
+                command.FullName != null ? new FullName(command.FullName) : null,
+                command.PhoneNumber != null ? new PhoneNumber(command.PhoneNumber) : null,
                 command.Gender, 
                 command.DateOfBirth,
                 command.Address, 
-                Avatar.FromUrl(command.AvatarUrl),
+                command.AvatarUrl != null ? Avatar.FromUrl(command.AvatarUrl) : null,
                 command.UpdatedBy);
             _userRepository.Update(user);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

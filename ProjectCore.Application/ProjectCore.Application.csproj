@@ -10,10 +10,4 @@
     <ProjectReference Include="..\ProjectCore.Domain\ProjectCore.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\Users\" />
-    <Folder Include="Mappings\" />
-    <Folder Include="Common\" />
-  </ItemGroup>
-
 </Project>

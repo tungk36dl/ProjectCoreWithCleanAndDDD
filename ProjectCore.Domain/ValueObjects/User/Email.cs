@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,11 +23,11 @@ namespace ProjectCore.Domain.ValueObjects.User
             Value = value.Trim().ToLowerInvariant();
         }
 
-        private static bool IsValid(string email)
+        public static bool IsValid(string email)
         {
             try
             {
-                var addr = new System.Net.Mail.MailAddress(email);
+                var addr = new MailAddress(email);
                 return addr.Address == email;
             }
             catch
@@ -36,6 +37,8 @@ namespace ProjectCore.Domain.ValueObjects.User
         }
 
         public override string ToString() => Value;
+
+
     }
 
 }

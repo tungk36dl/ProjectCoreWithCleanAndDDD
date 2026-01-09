@@ -38,5 +38,17 @@ public sealed class UserNameAlreadyExistsException : UserDomainException
         : base($"User with username '{userName}' already exists.") { }
 }
 
+public sealed class UserNotFoundException : UserDomainException
+{
+    public UserNotFoundException() : base("User not found!") { }
+}
+
+public sealed class InvalidLoginException : DomainException
+{
+    public InvalidLoginException()
+        : base("Invalid username/email or password.") { }
+}
+
+
 
 
