@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProjectCore.Application.Common.Security;
 using ProjectCore.Application.Interfaces;
 using ProjectCore.Domain.Interfaces.UserRepository;
+using ProjectCore.Domain.Interfaces.RoleRepository;
 using ProjectCore.Infrastructure.Persistence;
 using ProjectCore.Infrastructure.Repositories;
 using ProjectCore.Infrastructure.Security;
@@ -28,6 +29,7 @@ namespace ProjectCore.Infrastructure
                     ));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPermissionQueryRepository, PermissionQueryRepository>();
             services.AddScoped<IPasswordHasher, BCryptPasswordHasher>();

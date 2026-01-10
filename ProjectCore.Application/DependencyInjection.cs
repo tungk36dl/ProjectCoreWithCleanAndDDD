@@ -12,6 +12,8 @@ using ProjectCore.Application.UseCases.Users.Queries.GetUserByUserNameOrEmail;
 using ProjectCore.Application.UseCases.Users.Queries.GetAllUsers;
 using ProjectCore.Application.UseCases.Users.Commands.UpdateUser;
 using ProjectCore.Application.UseCases.Users.Commands.DeleteUser;
+using ProjectCore.Application.UseCases.Users.Queries.GetDataUsers;
+using ProjectCore.Application.UseCases.Roles.Queries.GetAllRoles;
 
 namespace ProjectCore.Application
 {
@@ -28,6 +30,8 @@ namespace ProjectCore.Application
             services.AddScoped<GetAllUsersHandler>();
             services.AddScoped<UpdateUserHandler>();
             services.AddScoped<DeleteUserHandler>();
+            services.AddScoped<GetDataUserHandler>();
+            services.AddScoped<GetAllRolesHandler>();
 
             return services;
         }

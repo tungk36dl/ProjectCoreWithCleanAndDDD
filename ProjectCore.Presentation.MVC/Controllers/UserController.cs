@@ -4,7 +4,11 @@ using ProjectCore.Application.UseCases.Users.Commands.CreateUser;
 using ProjectCore.Application.UseCases.Users.Commands.DeleteUser;
 using ProjectCore.Application.UseCases.Users.Commands.UpdateUser;
 using ProjectCore.Application.UseCases.Users.Queries.GetAllUsers;
+using ProjectCore.Application.UseCases.Users.Queries.GetDataUsers;
+using ProjectCore.Application.UseCases.Roles.Queries.GetAllRoles;
 using ProjectCore.Application.UseCases.Users.Queries.GetUserById;
+using ProjectCore.Domain.Interfaces.UserRepository;
+using ProjectCore.Presentation.MVC.Models.Users;
 
 namespace ProjectCore.Presentation.MVC.Controllers
 {
@@ -15,6 +19,8 @@ namespace ProjectCore.Presentation.MVC.Controllers
 
 
         private readonly GetAllUsersHandler _getAllUsersHandler;
+        private readonly GetDataUserHandler _getDataUserHandler;
+        private readonly GetAllRolesHandler _getAllRolesHandler;
         private readonly CreateUserHandler _createUserHandler;
         private readonly UpdateUserHandler _updateUserHandler;
         private readonly DeleteUserHandler _deleteUserHandler;
@@ -24,6 +30,8 @@ namespace ProjectCore.Presentation.MVC.Controllers
             ILogger<UserController> logger,
             IPasswordHasher passwordHasher,
             GetAllUsersHandler getAllUsersHandler,
+            GetDataUserHandler getDataUserHandler,
+            GetAllRolesHandler getAllRolesHandler,
             CreateUserHandler createUserHandler,
             UpdateUserHandler updateUserHandler,
             DeleteUserHandler deleteUserHandler,
@@ -32,16 +40,35 @@ namespace ProjectCore.Presentation.MVC.Controllers
             _logger = logger;
             _passwordHasher = passwordHasher;
             _getAllUsersHandler = getAllUsersHandler;
+            _getDataUserHandler = getDataUserHandler;
+            _getAllRolesHandler = getAllRolesHandler;
             _createUserHandler = createUserHandler;
             _updateUserHandler = updateUserHandler;
             _deleteUserHandler = deleteUserHandler;
             _getUserByIdHandler = getUserByIdHandler;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+            [FromQuery] UserQueryViewModel query)
         {
-            var users = await _getAllUsersHandler.Handle( CancellationToken.None);
-            return View(users);
+            var search = new UserSearch
+            {
+                Keyword = query.Keyword,
+                UserName = query.UserName,
+                Email = query.Email,
+                FullName = query.FullName,
+                Gender = query.Gender,
+                RoleId = query.RoleId,
+                SortBy = query.SortBy,
+                SortDescending = query.SortDescending,
+                Page = query.Page,
+                PageSize = 10
+            };
+
+            ViewBag.Roles = await _getAllRolesHandler.Handle();
+
+            var result = await _getDataUserHandler.Handle(search, CancellationToken.None);
+            return View(result);
         }
 
         [HttpGet]

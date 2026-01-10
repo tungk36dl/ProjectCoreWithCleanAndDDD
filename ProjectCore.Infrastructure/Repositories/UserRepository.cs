@@ -90,7 +90,7 @@ namespace ProjectCore.Infrastructure.Repositories
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<IReadOnlyList<User>> GetDataAsync(
+        public async Task<(IEnumerable<User> Data, int TotalCount)> GetDataAsync(
      UserSearch search,
      CancellationToken cancellationToken = default)
         {
@@ -123,6 +123,13 @@ namespace ProjectCore.Infrastructure.Repositories
                 query = query.Where(x => x.Gender == gender);
             }
 
+            if (!string.IsNullOrWhiteSpace(search.Keyword))
+            {
+                query = query.Where(x => x.UserName.Value.Contains(search.Keyword)
+                                      || x.Email.Value.Contains(search.Keyword)
+                                      || (x.FullName != null && x.FullName.Value.Contains(search.Keyword)));
+            }
+
             if (search.RoleId.HasValue)
             {
                 query = query.Where(x =>
@@ -131,13 +138,16 @@ namespace ProjectCore.Infrastructure.Repositories
 
             query = ApplySorting(query, search);
 
+            var totalCount = await query.CountAsync(cancellationToken);
+
             int skip = (search.Page - 1) * search.PageSize;
 
             query = query
                 .Skip(skip)
                 .Take(search.PageSize);
 
-            return await query.ToListAsync(cancellationToken);
+            var data = await query.ToListAsync(cancellationToken);
+            return (data, totalCount);
         }
 
 

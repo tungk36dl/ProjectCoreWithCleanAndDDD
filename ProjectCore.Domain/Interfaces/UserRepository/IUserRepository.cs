@@ -50,5 +50,5 @@ public interface IUserRepository
     
     Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<User>> GetDataAsync(UserSearch seach, CancellationToken cancellationToken = default);
+    Task<(IEnumerable<User> Data, int TotalCount)> GetDataAsync(UserSearch seach, CancellationToken cancellationToken = default);
 }

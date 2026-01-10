@@ -1,4 +1,5 @@
 ﻿using ProjectCore.Application.Dtos.Users;
+using ProjectCore.Application.Common.Models;
 using ProjectCore.Application.Interfaces;
 using ProjectCore.Application.Mappings;
 using ProjectCore.Domain.Interfaces.UserRepository;
@@ -20,11 +21,12 @@ namespace ProjectCore.Application.UseCases.Users.Queries.GetDataUsers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<UserDto>> Handle(UserSearch search, CancellationToken cancellationToken)
+        public async Task<PagedResult<UserDto>> Handle(UserSearch search, CancellationToken cancellationToken)
         {
-            var users = await _userRepository.GetDataAsync(search, cancellationToken);
-            var response = users.Select(user => UserMapper.ToDto(user)).ToList();
-            return response;
+            // Chỉ lấy danh sách user và số lượng user từ repository, page và pageSize vẫn giữ nguyên
+            var (users, count) = await _userRepository.GetDataAsync(search, cancellationToken);
+            var userDtos = users.Select(user => UserMapper.ToDto(user)).ToList();
+            return new PagedResult<UserDto>(userDtos, count, search.Page, search.PageSize);
         }
 
 
