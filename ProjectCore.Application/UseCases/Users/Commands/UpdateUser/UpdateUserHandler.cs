@@ -1,7 +1,7 @@
 using ProjectCore.Application.Interfaces;
 using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.Exceptions;
-using ProjectCore.Domain.Interfaces;
+using ProjectCore.Domain.Interfaces.UserRepository;
 using ProjectCore.Domain.ValueObjects.User;
 using System;
 using System.Collections.Generic;

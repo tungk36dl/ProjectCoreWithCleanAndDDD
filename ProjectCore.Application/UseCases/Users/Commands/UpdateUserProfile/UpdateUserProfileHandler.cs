@@ -1,6 +1,6 @@
 ﻿using ProjectCore.Application.Interfaces;
 using ProjectCore.Domain.Exceptions;
-using ProjectCore.Domain.Interfaces;
+using ProjectCore.Domain.Interfaces.UserRepository;
 using ProjectCore.Domain.ValueObjects.User;
 
 namespace ProjectCore.Application.UseCases.Users.Commands.UpdateUserProfile

@@ -1,6 +1,6 @@
 ﻿using ProjectCore.Application.Dtos.Users;
 using ProjectCore.Application.Mappings;
-using ProjectCore.Domain.Interfaces;
+using ProjectCore.Domain.Interfaces.UserRepository;
 
 namespace ProjectCore.Application.UseCases.Users.Queries.GetUserByUserNameOrEmail
 {

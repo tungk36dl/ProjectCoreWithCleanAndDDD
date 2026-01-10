@@ -1,7 +1,7 @@
 ﻿using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.ValueObjects.Permission;
 
-namespace ProjectCore.Domain.Interfaces
+namespace ProjectCore.Domain.Interfaces.PermissionRepository
 {
     public interface IPermissionRepository
     {

@@ -2,7 +2,7 @@
 using ProjectCore.Application.Interfaces;
 using ProjectCore.Application.UseCases.Users.Commands.Login;
 using ProjectCore.Domain.Exceptions;
-using ProjectCore.Domain.Interfaces;
+using ProjectCore.Domain.Interfaces.UserRepository;
 
 public sealed class LoginUserHandler
 {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectCore.Application.Common.Security;
 using ProjectCore.Application.Interfaces;
-using ProjectCore.Domain.Interfaces;
+using ProjectCore.Domain.Interfaces.UserRepository;
 using ProjectCore.Infrastructure.Persistence;
 using ProjectCore.Infrastructure.Repositories;
 using ProjectCore.Infrastructure.Security;

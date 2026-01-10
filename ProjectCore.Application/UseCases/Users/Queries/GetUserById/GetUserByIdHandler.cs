@@ -1,7 +1,7 @@
 ﻿using ProjectCore.Application.Dtos.Users;
 using ProjectCore.Application.Mappings;
 using ProjectCore.Domain.Exceptions;
-using ProjectCore.Domain.Interfaces;
+using ProjectCore.Domain.Interfaces.UserRepository;
 
 namespace ProjectCore.Application.UseCases.Users.Queries.GetUserById
 {

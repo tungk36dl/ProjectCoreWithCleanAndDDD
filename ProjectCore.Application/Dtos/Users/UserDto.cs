@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjectCore.Application.Dtos.Users
 {
-    public sealed class UserDto
+    public sealed class UserDto : DomainDto
     {
         public Guid Id { get; init; }
 

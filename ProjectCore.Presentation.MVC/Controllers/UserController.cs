@@ -40,7 +40,7 @@ namespace ProjectCore.Presentation.MVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var users = await _getAllUsersHandler.Handle(new GetAllUsersQuery(), CancellationToken.None);
+            var users = await _getAllUsersHandler.Handle( CancellationToken.None);
             return View(users);
         }
 

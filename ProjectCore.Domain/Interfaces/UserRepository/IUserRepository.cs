@@ -1,7 +1,7 @@
 ﻿using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.ValueObjects.User;
 
-namespace ProjectCore.Domain.Interfaces;
+namespace ProjectCore.Domain.Interfaces.UserRepository;
 
 public interface IUserRepository
 {
@@ -49,4 +49,6 @@ public interface IUserRepository
     void Remove(User user);
     
     Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<User>> GetDataAsync(UserSearch seach, CancellationToken cancellationToken = default);
 }

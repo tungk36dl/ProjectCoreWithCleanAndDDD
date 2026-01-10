@@ -1,6 +1,7 @@
 using ProjectCore.Application.Dtos.Users;
 using ProjectCore.Application.Mappings;
-using ProjectCore.Domain.Interfaces;
+using ProjectCore.Domain.Interfaces.UserRepository;
+using ProjectCore.Domain.ValueObjects.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,9 @@ namespace ProjectCore.Application.UseCases.Users.Queries.GetAllUsers
             _userRepository = userRepository;
         }
 
-        public async Task<IEnumerable<UserDto>> Handle(GetAllUsersQuery query, CancellationToken cancellationToken)
+        public async Task<IEnumerable<UserDto>> Handle(CancellationToken cancellationToken)
         {
-            var users = await _userRepository.GetAllAsync(cancellationToken);
+            var users = await _userRepository.GetAllAsync(cancellationToken);            
             return users.Select(UserMapper.ToDto);
         }
     }
