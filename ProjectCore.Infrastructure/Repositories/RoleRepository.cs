@@ -1,13 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectCore.Domain.Entities;
+using ProjectCore.Domain.Interfaces;
 using ProjectCore.Domain.Interfaces.RoleRepository;
 using ProjectCore.Domain.ValueObjects.Role;
 using ProjectCore.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectCore.Infrastructure.Repositories
 {
@@ -22,7 +18,9 @@ namespace ProjectCore.Infrastructure.Repositories
 
         public async Task<Role?> GetByIdAsync(Guid roleId, CancellationToken cancellationToken = default)
         {
-            return await _context.Roles.FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
+            return await _context.Roles
+                .Include(x => x.RolePermissions)
+                .FirstOrDefaultAsync(x => x.Id == roleId, cancellationToken);
         }
 
         public async Task<Role?> GetByNameAsync(RoleName roleName, CancellationToken cancellationToken = default)
@@ -52,7 +50,71 @@ namespace ProjectCore.Infrastructure.Repositories
 
         public async Task<IEnumerable<Role>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _context.Roles.ToListAsync(cancellationToken);
+            return await _context.Roles
+                .Include(x => x.RolePermissions)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<(IEnumerable<Role> Data, int TotalCount)> GetDataAsync(
+            RoleSearch search,
+            CancellationToken cancellationToken = default)
+        {
+            IQueryable<Role> query = _context.Roles
+                .Include(x => x.RolePermissions)
+                .AsNoTracking();
+
+            if (!string.IsNullOrWhiteSpace(search.Name))
+            {
+                query = query.Where(x =>
+                    x.Name.Value.Contains(search.Name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(search.Keyword))
+            {
+                query = query.Where(x => 
+                    x.Name.Value.Contains(search.Keyword) ||
+                    (x.Description != null && x.Description.Contains(search.Keyword)));
+            }
+
+            query = ApplySorting(query, search);
+
+            var totalCount = await query.CountAsync(cancellationToken);
+
+            int skip = (search.Page - 1) * search.PageSize;
+
+            query = query
+                .Skip(skip)
+                .Take(search.PageSize);
+
+            var data = await query.ToListAsync(cancellationToken);
+            return (data, totalCount);
+        }
+
+        private static IQueryable<Role> ApplySorting(
+            IQueryable<Role> query,
+            SearchBase search)
+        {
+            if (string.IsNullOrWhiteSpace(search.SortBy))
+                return query.OrderBy(x => x.Name.Value);
+
+            bool desc = search.SortDescending;
+
+            return search.SortBy switch
+            {
+                "Name" =>
+                    desc ? query.OrderByDescending(x => x.Name.Value)
+                         : query.OrderBy(x => x.Name.Value),
+
+                "Description" =>
+                    desc ? query.OrderByDescending(x => x.Description ?? string.Empty)
+                         : query.OrderBy(x => x.Description ?? string.Empty),
+
+                "CreatedDate" =>
+                    desc ? query.OrderByDescending(x => x.CreatedDate)
+                         : query.OrderBy(x => x.CreatedDate),
+
+                _ => query.OrderBy(x => x.Name.Value)
+            };
         }
     }
 }

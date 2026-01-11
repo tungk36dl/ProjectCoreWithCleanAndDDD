@@ -1,12 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProjectCore.Application.Dtos.Roles;
+using ProjectCore.Application.Mappings;
+using ProjectCore.Domain.Exceptions;
+using ProjectCore.Domain.Interfaces.RoleRepository;
 
 namespace ProjectCore.Application.UseCases.Roles.Queries.GetRoleById
 {
     public class GetRoleByIdHandler
     {
+        private readonly IRoleRepository _roleRepository;
+
+        public GetRoleByIdHandler(IRoleRepository roleRepository)
+        {
+            _roleRepository = roleRepository;
+        }
+
+        public async Task<RoleDto> Handle(
+            GetRoleByIdQuery query,
+            CancellationToken cancellationToken)
+        {
+            var role = await _roleRepository.GetByIdAsync(
+                query.Id,
+                cancellationToken);
+            
+            if (role is null)
+                throw new RoleNotFoundException(query.Id);
+            
+            return RoleMapper.ToDto(role);
+        }
     }
 }

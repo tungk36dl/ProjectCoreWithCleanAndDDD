@@ -82,6 +82,13 @@ namespace ProjectCore.Presentation.MVC.Controllers
         {
             try
             {
+                if (!CurrentUserId.HasValue)
+                {
+                    ModelState.AddModelError("", "Người dùng chưa đăng nhập");
+                    return View(command);
+                }
+
+                command.CreatedBy = CurrentUserId.Value;
                 await _createUserHandler.Handle(command, CancellationToken.None);
                 return RedirectToAction(nameof(Index));
             }
@@ -121,6 +128,14 @@ namespace ProjectCore.Presentation.MVC.Controllers
         {
              try
             {
+                if (!CurrentUserId.HasValue)
+                {
+                    ModelState.AddModelError("", "Người dùng chưa đăng nhập");
+                    return View(command);
+                }
+
+                //command = command with { UpdatedBy = CurrentUserId.Value };
+                command.UpdatedBy = CurrentUserId.Value;
                 await _updateUserHandler.Handle(command, CancellationToken.None);
                 return RedirectToAction(nameof(Index));
             }

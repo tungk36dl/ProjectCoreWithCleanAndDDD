@@ -12,6 +12,6 @@ namespace ProjectCore.Application.UseCases.Roles.Commands.UpdateRole
         public string? Name { get; init; }
         public string? Description { get; init; }
         
-        public Guid UpdatedBy { get; init; }
+        public Guid UpdatedBy { get; set; }
     }
 }

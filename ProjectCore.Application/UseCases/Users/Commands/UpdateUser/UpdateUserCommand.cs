@@ -18,6 +18,6 @@ namespace ProjectCore.Application.UseCases.Users.Commands.UpdateUser
         public string? Address { get; init; }
         public string? AvatarUrl { get; init; }
         
-        public Guid UpdatedBy { get; init; }
+        public Guid UpdatedBy { get; set; }
     }
 }

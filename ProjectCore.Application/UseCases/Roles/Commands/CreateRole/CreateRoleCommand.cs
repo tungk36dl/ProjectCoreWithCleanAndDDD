@@ -10,6 +10,6 @@ namespace ProjectCore.Application.UseCases.Roles.Commands.CreateRole
     {
         public string RoleName { get; init; }
         public string? Description { get; init; }
-        public Guid CreatedBy { get; init; }
+        public Guid CreatedBy { get; set; }
     }
 }

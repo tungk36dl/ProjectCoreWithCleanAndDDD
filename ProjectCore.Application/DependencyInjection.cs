@@ -14,6 +14,11 @@ using ProjectCore.Application.UseCases.Users.Commands.UpdateUser;
 using ProjectCore.Application.UseCases.Users.Commands.DeleteUser;
 using ProjectCore.Application.UseCases.Users.Queries.GetDataUsers;
 using ProjectCore.Application.UseCases.Roles.Queries.GetAllRoles;
+using ProjectCore.Application.UseCases.Roles.Commands.CreateRole;
+using ProjectCore.Application.UseCases.Roles.Commands.UpdateRole;
+using ProjectCore.Application.UseCases.Roles.Commands.DeleteRole;
+using ProjectCore.Application.UseCases.Roles.Queries.GetRoleById;
+using ProjectCore.Application.UseCases.Roles.Queries.GetDataRoles;
 
 namespace ProjectCore.Application
 {
@@ -31,7 +36,14 @@ namespace ProjectCore.Application
             services.AddScoped<UpdateUserHandler>();
             services.AddScoped<DeleteUserHandler>();
             services.AddScoped<GetDataUserHandler>();
+            
+            // Role handlers
             services.AddScoped<GetAllRolesHandler>();
+            services.AddScoped<GetDataRolesHandler>();
+            services.AddScoped<GetRoleByIdHandler>();
+            services.AddScoped<CreateRoleHandler>();
+            services.AddScoped<UpdateRoleHandler>();
+            services.AddScoped<DeleteRoleHandler>();
 
             return services;
         }

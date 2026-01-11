@@ -1,10 +1,5 @@
 ﻿using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.ValueObjects.Role;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProjectCore.Domain.Interfaces.RoleRepository
 {
@@ -21,5 +16,6 @@ namespace ProjectCore.Domain.Interfaces.RoleRepository
         void Update(Role role);
         void Remove(Role role);
         Task<IEnumerable<Role>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<(IEnumerable<Role> Data, int TotalCount)> GetDataAsync(RoleSearch search, CancellationToken cancellationToken = default);
     }
 }
