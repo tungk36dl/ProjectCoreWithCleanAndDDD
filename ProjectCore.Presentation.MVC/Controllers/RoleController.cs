@@ -5,6 +5,7 @@ using ProjectCore.Application.UseCases.Roles.Commands.UpdateRole;
 using ProjectCore.Application.UseCases.Roles.Queries.GetAllRoles;
 using ProjectCore.Application.UseCases.Roles.Queries.GetDataRoles;
 using ProjectCore.Application.UseCases.Roles.Queries.GetRoleById;
+using ProjectCore.Application.UseCases.Permissions.Queries.GetAllPermissions;
 using ProjectCore.Domain.Interfaces.RoleRepository;
 using ProjectCore.Presentation.MVC.Models.Roles;
 
@@ -19,6 +20,7 @@ namespace ProjectCore.Presentation.MVC.Controllers
         private readonly UpdateRoleHandler _updateRoleHandler;
         private readonly DeleteRoleHandler _deleteRoleHandler;
         private readonly GetRoleByIdHandler _getRoleByIdHandler;
+        private readonly GetAllPermissionsHandler _getAllPermissionsHandler;
 
         public RoleController(
             ILogger<RoleController> logger,
@@ -27,7 +29,8 @@ namespace ProjectCore.Presentation.MVC.Controllers
             CreateRoleHandler createRoleHandler,
             UpdateRoleHandler updateRoleHandler,
             DeleteRoleHandler deleteRoleHandler,
-            GetRoleByIdHandler getRoleByIdHandler)
+            GetRoleByIdHandler getRoleByIdHandler,
+            GetAllPermissionsHandler getAllPermissionsHandler)
         {
             _logger = logger;
             _getAllRolesHandler = getAllRolesHandler;
@@ -36,6 +39,7 @@ namespace ProjectCore.Presentation.MVC.Controllers
             _updateRoleHandler = updateRoleHandler;
             _deleteRoleHandler = deleteRoleHandler;
             _getRoleByIdHandler = getRoleByIdHandler;
+            _getAllPermissionsHandler = getAllPermissionsHandler;
         }
 
         public async Task<IActionResult> Index(
@@ -56,9 +60,11 @@ namespace ProjectCore.Presentation.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var permissions = await _getAllPermissionsHandler.Handle(CancellationToken.None);
+            ViewBag.Permissions = permissions;
+            return View(new CreateRoleCommand());
         }
 
         [HttpPost]
@@ -69,6 +75,8 @@ namespace ProjectCore.Presentation.MVC.Controllers
                 if (!CurrentUserId.HasValue)
                 {
                     ModelState.AddModelError("", "Người dùng chưa đăng nhập");
+                    var permissions = await _getAllPermissionsHandler.Handle(CancellationToken.None);
+                    ViewBag.Permissions = permissions;
                     return View(command);
                 }
 
@@ -79,6 +87,8 @@ namespace ProjectCore.Presentation.MVC.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
+                var permissions = await _getAllPermissionsHandler.Handle(CancellationToken.None);
+                ViewBag.Permissions = permissions;
                 return View(command);
             }
         }

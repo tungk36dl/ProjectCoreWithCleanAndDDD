@@ -34,6 +34,17 @@ public class User : DomainEntity<Guid>
         Email = email ?? throw new ArgumentNullException(nameof(email));
         PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
     }
+    public User(
+    Guid id,
+    UserName userName,
+    Email email,
+    string passwordHash)
+    {
+        Id = id;
+        UserName = userName ?? throw new ArgumentNullException(nameof(userName));
+        Email = email ?? throw new ArgumentNullException(nameof(email));
+        PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
+    }
 
     // ===== Behavior =====
     /// <summary>
@@ -71,8 +82,9 @@ public class User : DomainEntity<Guid>
     /// <param name="assignedBy"></param>
     public void AssignRole(Guid roleId, Guid assignedBy)
     {
-        if (_userRoles.Any(x => x.RoleId == roleId))
-            throw new UserAlreadyHasRoleException();
+        // Dù có role rồi đăng kí tiếp cũng được
+        //if (_userRoles.Any(x => x.RoleId == roleId))
+        //    throw new UserAlreadyHasRoleException();
 
         _userRoles.Add(new UserRole(Id, roleId, assignedBy));
     }

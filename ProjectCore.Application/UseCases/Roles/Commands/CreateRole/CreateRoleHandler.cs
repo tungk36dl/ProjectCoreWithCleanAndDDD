@@ -1,4 +1,4 @@
-﻿using ProjectCore.Application.Interfaces;
+using ProjectCore.Application.Interfaces;
 using ProjectCore.Domain.Entities;
 using ProjectCore.Domain.Exceptions;
 using ProjectCore.Domain.Interfaces.RoleRepository;
@@ -37,6 +37,15 @@ namespace ProjectCore.Application.UseCases.Roles.Commands.CreateRole
                 new RoleName(command.RoleName),
                 command.Description,
                 command.CreatedBy);
+
+            // Gán permissions cho role
+            if (command.PermissionIds != null && command.PermissionIds.Any())
+            {
+                foreach (var permissionId in command.PermissionIds)
+                {
+                    role.AddPermission(permissionId, command.CreatedBy);
+                }
+            }
 
             await _roleRepository.AddAsync(role, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

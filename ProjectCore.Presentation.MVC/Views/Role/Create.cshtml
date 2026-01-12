@@ -1,13 +1,15 @@
 @model ProjectCore.Application.UseCases.Roles.Commands.CreateRole.CreateRoleCommand
+@using ProjectCore.Application.Dtos.Permissions
 
 @{
     ViewData["Title"] = "Tạo Role Mới";
+    var permissions = ViewBag.Permissions as IEnumerable<PermissionDto> ?? new List<PermissionDto>();
 }
 
 <h1>Tạo Role Mới</h1>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
@@ -21,6 +23,54 @@
                 <label asp-for="Description" class="control-label">Mô tả</label>
                 <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Quyền (Permissions)</label>
+                <div class="border p-3" style="max-height: 400px; overflow-y: auto;">
+                    @if (permissions.Any())
+                    {
+                        var permissionsByModule = permissions.GroupBy(p => p.Module);
+                        foreach (var moduleGroup in permissionsByModule)
+                        {
+                            @if (moduleGroup != null)
+                            {
+                                <div class="mb-3">
+                                    <h6 class="fw-bold text-primary">@moduleGroup.Key</h6>
+                                    <div class="ms-3">
+                                        @foreach (var permission in moduleGroup)
+                                        {
+                                            @if (permission != null)
+                                            {
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input"
+                                                           type="checkbox"
+                                                           name="PermissionIds"
+                                                           value="@permission.Id"
+                                                           id="permission_@permission.Id"
+                                                           @(Model.PermissionIds != null && Model.PermissionIds.Contains(permission.Id) ? "checked" : "") />
+                                                    <label class="form-check-label" for="permission_@permission.Id">
+                                                        <strong>@permission.Action</strong>
+                                                        @if (!string.IsNullOrEmpty(permission.Description))
+                                                        {
+                                                            <span class="text-muted"> - @permission.Description</span>
+                                                        }
+                                                        <small class="text-muted d-block">(@permission.Code)</small>
+                                                    </label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">Chưa có permission nào. Vui lòng scan permissions trước.</p>
+                    }
+                </div>
             </div>
 
             <div class="form-group">

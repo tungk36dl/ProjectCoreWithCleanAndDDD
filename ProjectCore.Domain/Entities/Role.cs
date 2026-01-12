@@ -10,7 +10,7 @@ namespace ProjectCore.Domain.Entities
         public string? Description { get; private set; }
 
         private readonly List<RolePermission> _permissions = new();
-        public IReadOnlyCollection<RolePermission> RolePermissions => _permissions.AsReadOnly();
+        public IReadOnlyCollection<RolePermission> RolePermissions => _permissions;
 
         protected Role() { }
 

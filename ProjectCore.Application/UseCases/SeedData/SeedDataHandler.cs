@@ -144,8 +144,8 @@ public sealed class SeedDataHandler
         if (existing != null)
         {
             // Ensure user has admin role
-            existing.AssignRole(adminRoleId, systemUserId);
-            _userRepository.Update(existing);
+            //existing.AssignRole(adminRoleId, systemUserId);
+            //_userRepository.Update(existing);
             return;
         }
 

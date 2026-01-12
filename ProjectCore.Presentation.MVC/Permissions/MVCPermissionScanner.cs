@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectCore.Application.UseCases.Permissions.Scan;
 
-namespace ProjectCore.Infrastructure.Permissions
+namespace ProjectCore.Presentation.MVC.Permissions
 {
     public sealed class MvcPermissionScanner : IPermissionScanner
     {
@@ -19,14 +19,13 @@ namespace ProjectCore.Infrastructure.Permissions
                 var module = controller.Name.Replace("Controller", "");
 
                 var actions = controller
-                    .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
                     .Where(m =>
-                        !m.IsDefined(typeof(NonActionAttribute)));
+                        !m.IsDefined(typeof(NonActionAttribute)) &&
+                        IsValidActionMethod(m));
 
                 foreach (var action in actions)
                 {
-                    // yield là từ khóa trong C# được sử dụng để trả về một chuỗi các giá trị từ một phương thức,
-                    // thuộc tính hoặc trình lặp mà không cần phải tạo một tập hợp tạm thời để lưu trữ tất cả các giá trị đó.
                     yield return new PermissionScanResult
                     {
                         Module = module,
@@ -35,6 +34,28 @@ namespace ProjectCore.Infrastructure.Permissions
                 }
             }
         }
+
+        private static bool IsValidActionMethod(MethodInfo method)
+        {
+            // Loại bỏ method đặc biệt: get_, set_, operator...
+            if (method.IsSpecialName)
+                return false;
+
+            // Chỉ chấp nhận IActionResult hoặc Task<IActionResult>
+            var returnType = method.ReturnType;
+
+            if (typeof(IActionResult).IsAssignableFrom(returnType))
+                return true;
+
+            if (returnType.IsGenericType &&
+                returnType.GetGenericTypeDefinition() == typeof(Task<>) &&
+                typeof(IActionResult).IsAssignableFrom(returnType.GetGenericArguments()[0]))
+                return true;
+
+            return false;
+        }
+
+
     }
 
 

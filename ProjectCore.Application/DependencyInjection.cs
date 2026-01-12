@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using ProjectCore.Application.UseCases.Users.Commands.CreateUser;
 using ProjectCore.Application.UseCases.Users.Commands.UpdateUserProfile;
 using ProjectCore.Application.UseCases.Users.Queries.GetUserById;
@@ -13,6 +13,7 @@ using ProjectCore.Application.UseCases.Roles.Commands.UpdateRole;
 using ProjectCore.Application.UseCases.Roles.Commands.DeleteRole;
 using ProjectCore.Application.UseCases.Roles.Queries.GetRoleById;
 using ProjectCore.Application.UseCases.Roles.Queries.GetDataRoles;
+using ProjectCore.Application.UseCases.Permissions.Queries.GetAllPermissions;
 using ProjectCore.Application.UseCases.SeedData;
 
 namespace ProjectCore.Application
@@ -39,6 +40,9 @@ namespace ProjectCore.Application
             services.AddScoped<CreateRoleHandler>();
             services.AddScoped<UpdateRoleHandler>();
             services.AddScoped<DeleteRoleHandler>();
+
+            // Permission handlers
+            services.AddScoped<GetAllPermissionsHandler>();
 
             // Seed data handler
             services.AddScoped<SeedDataHandler>();

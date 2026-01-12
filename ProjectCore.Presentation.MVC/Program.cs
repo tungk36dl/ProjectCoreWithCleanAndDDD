@@ -5,11 +5,10 @@ using ProjectCore.Application.Common.Security;
 using ProjectCore.Application.UseCases.Permissions.Scan;
 using ProjectCore.Application.UseCases.SeedData;
 using ProjectCore.Infrastructure;
-using ProjectCore.Infrastructure.Permissions;
-using ProjectCore.Infrastructure.Persistence;
 using ProjectCore.Infrastructure.Security;
 using ProjectCore.Presentation.MVC.Authentication.Claims;
 using ProjectCore.Presentation.MVC.Authentication.SignIn;
+using ProjectCore.Presentation.MVC.Permissions;
 
 // Load .env file nếu có
 Env.Load();

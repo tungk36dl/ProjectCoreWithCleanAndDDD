@@ -1,38 +1,70 @@
 @model ProjectCore.Application.UseCases.Users.Commands.CreateUser.CreateUserCommand
+@using ProjectCore.Application.Dtos.Roles
 
 @{
-    ViewData["Title"] = "Create User";
+    ViewData["Title"] = "Tạo User Mới";
+    var roles = ViewBag.Roles as IEnumerable<RoleDto> ?? new List<RoleDto>();
 }
 
-<h1>Create User</h1>
+<h1>Tạo User Mới</h1>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
             <div class="form-group mb-3">
-                <label asp-for="UserName" class="control-label"></label>
+                <label asp-for="UserName" class="control-label">Tên đăng nhập</label>
                 <input asp-for="UserName" class="form-control" />
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
+            
             <div class="form-group mb-3">
-                <label asp-for="Email" class="control-label"></label>
+                <label asp-for="Email" class="control-label">Email</label>
                 <input asp-for="Email" class="form-control" type="email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+            
             <div class="form-group mb-3">
-                <label asp-for="PasswordHash" class="control-label">Password</label>
+                <label asp-for="PasswordHash" class="control-label">Mật khẩu</label>
                 <input asp-for="PasswordHash" class="form-control" type="password" />
                 <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
-            <!-- CreatedBy is omitted or hidden, usually handled by controller from current user context, but command requires it. 
-                 For simplicity, we might assume the handler or controller sets it, or we pass a dummy value if auth is not fully set up.
-                 Ideally, the Controller should set CreatedBy from HttpContext.User.
-            -->
+
+            <div class="form-group mb-3">
+                <label class="control-label">Vai trò (Roles)</label>
+                <div class="border p-3" style="max-height: 300px; overflow-y: auto;">
+                    @if (roles.Any())
+                    {
+                        @foreach (var role in roles)
+                        {
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       name="RoleIds" 
+                                       value="@role.Id" 
+                                       id="role_@role.Id"
+                                       @(Model.RoleIds != null && Model.RoleIds.Contains(role.Id) ? "checked" : "") />
+                                <label class="form-check-label" for="role_@role.Id">
+                                    <strong>@role.Name</strong>
+                                    @if (!string.IsNullOrEmpty(role.Description))
+                                    {
+                                        <span class="text-muted"> - @role.Description</span>
+                                    }
+                                </label>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">Chưa có role nào. Vui lòng tạo role trước.</p>
+                    }
+                </div>
+            </div>
             
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
             </div>
         </form>
     </div>

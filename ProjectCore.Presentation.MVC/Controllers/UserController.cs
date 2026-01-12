@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using ProjectCore.Application.Common.Security;
 using ProjectCore.Application.UseCases.Users.Commands.CreateUser;
 using ProjectCore.Application.UseCases.Users.Commands.DeleteUser;
@@ -72,9 +72,11 @@ namespace ProjectCore.Presentation.MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var roles = await _getAllRolesHandler.Handle(CancellationToken.None);
+            ViewBag.Roles = roles;
+            return View(new CreateUserCommand());
         }
 
         [HttpPost]
@@ -85,6 +87,8 @@ namespace ProjectCore.Presentation.MVC.Controllers
                 if (!CurrentUserId.HasValue)
                 {
                     ModelState.AddModelError("", "Người dùng chưa đăng nhập");
+                    var roles = await _getAllRolesHandler.Handle(CancellationToken.None);
+                    ViewBag.Roles = roles;
                     return View(command);
                 }
 
@@ -95,6 +99,8 @@ namespace ProjectCore.Presentation.MVC.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
+                var roles = await _getAllRolesHandler.Handle(CancellationToken.None);
+                ViewBag.Roles = roles;
                 return View(command);
             }
         }

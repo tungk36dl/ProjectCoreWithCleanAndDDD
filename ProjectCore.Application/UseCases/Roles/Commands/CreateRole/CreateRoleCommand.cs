@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +11,6 @@ namespace ProjectCore.Application.UseCases.Roles.Commands.CreateRole
         public string RoleName { get; init; }
         public string? Description { get; init; }
         public Guid CreatedBy { get; set; }
+        public List<Guid> PermissionIds { get; init; } = new();
     }
 }

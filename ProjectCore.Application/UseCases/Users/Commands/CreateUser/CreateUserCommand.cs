@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,8 @@ namespace ProjectCore.Application.UseCases.Users.Commands.CreateUser
         public string UserName { get; init; }
         public string Email { get; init; }
         public string PasswordHash { get; init; }
-        public Guid CreatedBy { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public List<Guid> RoleIds { get; init; } = new();
     }
 
 }
