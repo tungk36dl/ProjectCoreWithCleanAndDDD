@@ -25,7 +25,9 @@ namespace ProjectCore.Infrastructure.Repositories
 
         public async Task<Role?> GetByNameAsync(RoleName roleName, CancellationToken cancellationToken = default)
         {
-            return await _context.Roles.FirstOrDefaultAsync(x => x.Name.Value == roleName.Value, cancellationToken);
+            return await _context.Roles
+                .Include(x => x.RolePermissions)
+                .FirstOrDefaultAsync(x => x.Name.Value == roleName.Value, cancellationToken);
         }
 
         public async Task<bool> ExistsByNameAsync(RoleName roleName, CancellationToken cancellationToken = default)

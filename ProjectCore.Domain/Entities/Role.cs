@@ -3,6 +3,7 @@ using ProjectCore.Domain.ValueObjects.Role;
 
 namespace ProjectCore.Domain.Entities
 {
+
     public class Role : DomainEntity<Guid>
     {
         public RoleName Name { get; private set; }

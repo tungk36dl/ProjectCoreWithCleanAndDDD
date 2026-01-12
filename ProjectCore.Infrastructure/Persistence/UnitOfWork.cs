@@ -1,4 +1,5 @@
-﻿using ProjectCore.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using ProjectCore.Application.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +8,43 @@ using System.Threading.Tasks;
 
 namespace ProjectCore.Infrastructure.Persistence
 {
-    public sealed class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
+        private IDbContextTransaction? _transaction;
 
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+        public async Task BeginTransactionAsync(CancellationToken ct)
         {
-            await _context.SaveChangesAsync(cancellationToken);
+            _transaction = await _context.Database.BeginTransactionAsync(ct);
         }
+
+        public async Task CommitAsync(CancellationToken ct)
+        {
+            await _context.SaveChangesAsync(ct);
+            if (_transaction != null)
+            {
+                await _transaction.CommitAsync(ct);
+                await _transaction.DisposeAsync();
+            }
+        }
+
+        public async Task RollbackAsync(CancellationToken ct)
+        {
+            if (_transaction != null)
+            {
+                await _transaction.RollbackAsync(ct);
+                await _transaction.DisposeAsync();
+            }
+        }
+
+        public Task SaveChangesAsync(CancellationToken ct)
+            => _context.SaveChangesAsync(ct);
     }
+
 
 }

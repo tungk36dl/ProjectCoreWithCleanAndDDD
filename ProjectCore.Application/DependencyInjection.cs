@@ -1,11 +1,5 @@
-﻿using ProjectCore.Application.UseCases.Users.Commands.CreateUser;
-using Microsoft.Extensions.DependencyInjection;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using ProjectCore.Application.UseCases.Users.Commands.CreateUser;
 using ProjectCore.Application.UseCases.Users.Commands.UpdateUserProfile;
 using ProjectCore.Application.UseCases.Users.Queries.GetUserById;
 using ProjectCore.Application.UseCases.Users.Queries.GetUserByUserNameOrEmail;
@@ -19,6 +13,7 @@ using ProjectCore.Application.UseCases.Roles.Commands.UpdateRole;
 using ProjectCore.Application.UseCases.Roles.Commands.DeleteRole;
 using ProjectCore.Application.UseCases.Roles.Queries.GetRoleById;
 using ProjectCore.Application.UseCases.Roles.Queries.GetDataRoles;
+using ProjectCore.Application.UseCases.SeedData;
 
 namespace ProjectCore.Application
 {
@@ -26,12 +21,12 @@ namespace ProjectCore.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            // User handlers
             services.AddScoped<LoginUserHandler>();
             services.AddScoped<CreateUserHandler>();
             services.AddScoped<UpdateUserProfileHandler>();
             services.AddScoped<GetUserByIdHandler>();
             services.AddScoped<GetUserByUserNameEmailHandler>();
-
             services.AddScoped<GetAllUsersHandler>();
             services.AddScoped<UpdateUserHandler>();
             services.AddScoped<DeleteUserHandler>();
@@ -44,6 +39,9 @@ namespace ProjectCore.Application
             services.AddScoped<CreateRoleHandler>();
             services.AddScoped<UpdateRoleHandler>();
             services.AddScoped<DeleteRoleHandler>();
+
+            // Seed data handler
+            services.AddScoped<SeedDataHandler>();
 
             return services;
         }

@@ -1,4 +1,4 @@
-﻿using StudentMngt.Domain.Enums;
+﻿using ProjectCore.Domain.Enums;
 namespace ProjectCore.Domain.Entities;
 
 public abstract class DomainEntity<TKey>

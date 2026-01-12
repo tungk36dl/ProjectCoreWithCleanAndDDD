@@ -1,5 +1,4 @@
 ﻿using ProjectCore.Domain.Entities;
-using ProjectCore.Domain.ValueObjects.Permission;
 
 namespace ProjectCore.Domain.Interfaces.PermissionRepository
 {
@@ -7,6 +6,6 @@ namespace ProjectCore.Domain.Interfaces.PermissionRepository
     {
         Task<bool> ExistsAsync(string module, string action, CancellationToken ct);
         Task AddAsync(Permission permission, CancellationToken ct);
+        Task<IEnumerable<Permission>> GetAllAsync(CancellationToken ct = default);
     }
-
 }
